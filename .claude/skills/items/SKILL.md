@@ -32,10 +32,6 @@ Omit these fields (calculated at runtime):
 
 ## Item Types
 
-### Armor
-- `category: "Armor"`, slot must be one of: `"head"`, `"chest"`, `"shoulders"`, `"hands"`, `"waist"`, `"legs"`, `"feet"`
-- Use bonuses to define defensive stats
-
 ### Consumables
 - `category: "Consumable"`, no slot
 - Always `bonuses: []`
