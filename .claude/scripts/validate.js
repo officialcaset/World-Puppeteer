@@ -1400,7 +1400,7 @@ function validateUnknownFields(config, errors) {
   // Known fields per entity type
   const KNOWN_FIELDS = {
     npcs: new Set([
-      'name', 'type', 'currentLocation', 'currentArea', 'gender', 'faction',
+      'name', 'properName', 'type', 'currentLocation', 'currentArea', 'gender', 'faction',
       'basicInfo', 'hiddenInfo', 'visualDescription', 'visualTags', 'personality',
       'abilities', 'aliases', 'level', 'hpMax', 'hpCurrent', 'tier', 'vulnerabilities',
       'resistances', 'immunities', 'activeBuffs', 'known', 'lastSeenLocation',

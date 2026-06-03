@@ -91,20 +91,6 @@ interface ItemSlot {
 }
 ```
 
-### Required Item Slots
-
-Always include these 7 armor slots:
-
-| Slot | Category | Quantity |
-|------|----------|----------|
-| head | Armor | 1 |
-| chest | Armor | 1 |
-| shoulders | Armor | 1 |
-| hands | Armor | 1 |
-| waist | Armor | 1 |
-| legs | Armor | 1 |
-| feet | Armor | 1 |
-
 ## CombatSettings Schema
 
 ```typescript
