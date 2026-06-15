@@ -101,8 +101,8 @@ interface ItemSlot {
 interface CombatSettings {
   baseCombatXP: number                        // ✅ Base XP for combat victory (balanced: 200)
   minCombatXP: number                         // ✅ Minimum XP from combat (balanced: 50)
-  abilityCooldown: number                     // ✅ Default ability cooldown in ticks (balanced: 0)
-  abilityBonus: number                        // ✅ Bonus for ability checks (balanced: 10)
+  abilityCooldown: number                     // ✅ Cooldown given to AI-generated (learned) abilities, and the minimum turns between learning new ones. Does NOT affect predefined abilities (balanced: 0)
+  abilityBonus: number                        // ✅ Default bonus given to AI-generated (learned) abilities. Does NOT scale predefined abilities, which use their own authored bonus (balanced: 10)
   npcDailyHealingAmount: number               // ✅ NPC healing per day (balanced: 999)
   damageTypes: string[]                       // ✅ Available damage types (world-specific). Use lowercase ASCII — matching against vulnerabilities/resistances/immunities is case-sensitive and unnormalized, so "Fire" ≠ "fire" and mismatches fail silently
 }

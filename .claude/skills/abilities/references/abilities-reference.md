@@ -66,20 +66,17 @@ Characters track:
 
 ## Bonus Mechanics
 
-When an ability is used in an action, the `bonus` value is added to the relevant check.
+When a predefined ability is used in an action, its own `bonus` value is added to the relevant check directly, as authored. There is no global multiplier applied to it.
 
-Formula: `effectiveBonus = bonus × combatSettings.abilityBonus`
-
-The `abilityBonus` setting (default 1.0) allows global scaling of ability power.
+`combatSettings.abilityBonus` does **not** scale predefined abilities. It is the default `bonus` assigned to abilities the AI generates for a character during play (newly "learned" abilities). Predefined abilities keep the `bonus` you set on them.
 
 ## Cooldown Mechanics
 
 After using an ability:
 1. `lastUsedTick` is set to current tick
-2. Ability unavailable for `cooldown` turns
-3. Cooldown can be modified by `combatSettings.abilityCooldown` setting
+2. The ability is unavailable for its own `cooldown` turns
 
-Formula: `effectiveCooldown = cooldown × combatSettings.abilityCooldown`
+`combatSettings.abilityCooldown` does **not** modify predefined abilities' cooldowns. It applies to AI-generated (learned) abilities in two ways: it is the default `cooldown` they're given, and it is the minimum number of turns that must pass before a character can learn another new ability. Predefined abilities use the `cooldown` you author on them.
 
 ## Unlocking Abilities
 

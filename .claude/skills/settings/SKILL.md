@@ -86,8 +86,8 @@ The balanced values below support this progression curve.
 |-------|----------------|-------|
 | `baseCombatXP` | `200` | Combat is rewarding |
 | `minCombatXP` | `50` | Trivial fights still meaningful |
-| `abilityCooldown` | `0` | No cooldowns |
-| `abilityBonus` | `10` | Abilities give +10 to checks |
+| `abilityCooldown` | `0` | Cooldown for AI-generated (learned) abilities + throttle on learning new ones; does not affect predefined abilities |
+| `abilityBonus` | `10` | Default bonus for AI-generated (learned) abilities; does not scale predefined abilities |
 | `npcDailyHealingAmount` | `999` | NPCs fully heal daily |
 
 ### Character Progression (otherSettings)
