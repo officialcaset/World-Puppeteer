@@ -10,7 +10,7 @@ interface Location {
   basicInfo: string                 // ✅ Description of the location
   x: number                         // ✅ X coordinate on world map
   y: number                         // ✅ Y coordinate on world map
-  radius: number                    // ✅ Size of location (affects travel time)
+  radius: number                    // ✅ Size class: 1 small, 2 medium, 3 large. Map markers render by bucket (>2 = large). The number also sets the travel catchment (arrivals within 2×radius km) and the encounter-free zone (radius + minTravelDistance km)
   region: string                    // ✅ Key from regions.json
   complexityType: ComplexityType    // ✅ 'simple' | 'complex' | 'wilderness'
   detailType: 'basic' | 'detailed'  // ✅ Detail level - 'basic' triggers AI generation

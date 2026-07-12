@@ -27,7 +27,7 @@ const SECTION_LIMITS = {
   npcs: 1_000_000,
   locations: 1_000_000,
   npcTypes: 500_000,
-  items: 100_000,
+  itemTypes: 100_000,
   factions: 100_000,
   regions: 500_000,
   realms: 100_000,
@@ -53,7 +53,7 @@ const FIELD_LIMITS = {
 const ENTRY_LIMITS = {
   worldLore: { text: 4_000 },
   storyStarts: { combined: 8_000 },
-  items: { description: 4_000 },
+  itemTypes: { description: 4_000 },
   factions: { basicInfo: 4_000, hiddenInfo: 4_000 },
   npcTypes: { description: 8_000 },
   npcs: { combined: 8_000 },
@@ -468,7 +468,7 @@ function analyzeConfig(config) {
   // Image prompt configuration analysis
   if (config.imagePromptConfiguration && typeof config.imagePromptConfiguration === 'object') {
     let imagePromptTotal = 0;
-    for (const entityType of ['npcs', 'locations', 'regions']) {
+    for (const entityType of ['npcs', 'locations', 'areas', 'regions']) {
       const prompt = config.imagePromptConfiguration[entityType];
       if (typeof prompt !== 'string') continue;
       imagePromptTotal += prompt.length;

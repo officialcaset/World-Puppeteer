@@ -65,16 +65,15 @@ Rules:
 
 ## Radius Guidelines
 
-Infer radius from the location type:
+Radius is a size class — author exactly 1, 2, or 3:
 
-| Location Type | Radius |
-|---------------|--------|
-| Single room/building | 1-2 |
-| Small structure | 2-4 |
-| Village/small settlement | 4-8 |
-| Town | 8-15 |
-| Large town/small city | 15-25 |
-| Major city | 25-50 |
+| Radius | Size | Use for |
+|--------|------|---------|
+| `1` | small | Rooms, single buildings, small structures |
+| `2` | medium | Villages, camps, modest settlements |
+| `3` | large | Towns, cities, sprawling sites |
+
+Values above 3 don't make the map marker bigger (everything above 2 renders as large) — they only inflate the location's travel catchment (arrivals within 2×radius km resolve to it) and its encounter-free zone.
 
 ## Schema
 

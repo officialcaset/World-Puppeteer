@@ -265,7 +265,7 @@ interface WriteEffect {
 
 Write-number operators: `set`, `add`, `subtract`, `multiply`, `divide`
 Write-array operators: `set`, `add`, `remove`
-Write-string/boolean operators: `set`
+Write-string operators: `set`. Write-boolean operators: `set`, `toggle`
 
 ## Phase Partitioning
 

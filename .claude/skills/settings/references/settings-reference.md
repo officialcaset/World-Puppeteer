@@ -194,7 +194,7 @@ imageModelSources?: {
 }
 ```
 
-Optional top-level field that pins which image-generation model renders each image type for the world and games created from it. Values are image model names provided by the platform. Leave a field unset (or set to an unrecognized name) to fall back to the platform's current default model for that type.
+Optional top-level field that pins which image-generation model renders each image type while editing the world. Games created from the world start with these choices as their default, but each game can be created with its own image-model selection. Values are image model names provided by the platform. Leave a field unset (or set to an unrecognized name) to fall back to the platform's current default model for that type.
 
 ## Skill Check Formula
 

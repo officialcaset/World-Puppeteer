@@ -1,6 +1,4 @@
 {
-  "configVersion": "V34",
-  "heroesVersion": 34,
   "aiInstructions": {
     "generateStory": {
       "Victory and Downtime": "",
@@ -47,8 +45,8 @@
   "gameModes": {},
   "characterCreationMusic": "nonfantasy",
   "worldLore": {},
-  "embeddings": {},
   "triggers": {},
+  "questTriggers": {},
   "narrativeEvents": {},
   "storyStarts": {
     "Start": {
@@ -63,13 +61,14 @@
   },
   "abilities": {},
   "npcTypes": {},
-  "items": {},
+  "itemTypes": {},
   "realms": {},
   "regions": {},
   "locations": {},
   "factions": {},
   "npcs": {},
   "quests": {},
+  "arcs": {},
   "skills": {},
   "traits": {},
   "traitCategories": {},

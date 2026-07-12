@@ -16,7 +16,7 @@ Traits must be organized into categories in `tabs/traits.json` under `traitCateg
 | Field | Description |
 |-------|-------------|
 | `name` | Display name for the category |
-| `maxSelections` | How many traits player can pick (0 = unlimited) |
+| `maxSelections` | How many traits player can pick. 0 means none can be picked — don't use it |
 | `traits` | Array of trait keys in this category |
 
 Category patterns:

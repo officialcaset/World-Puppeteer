@@ -11,7 +11,7 @@ Complete character and count limits for world configs.
 | npcs | 1,000,000 chars |
 | locations | 1,000,000 chars |
 | npcTypes | 500,000 chars |
-| items | 100,000 chars |
+| itemTypes | 100,000 chars |
 | factions | 100,000 chars |
 | regions | 500,000 chars |
 | realms | 100,000 chars |

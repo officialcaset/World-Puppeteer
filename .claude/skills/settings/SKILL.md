@@ -138,7 +138,7 @@ These must be configured per-world:
 | `itemSettings.itemSlots` | World-specific |
 | `combatSettings.damageTypes` | Types that fit world theme |
 | `characterCreationMusic` | Optional top-level field. `"fantasy"` or `"nonfantasy"` background music for the character-creation screen. Defaults to `"fantasy"` |
-| `imageModelSources` | Optional top-level field. Pins which platform-provided image model renders NPC portraits (`portrait`), location/area images (`location`), and region maps (`region`) for the world and its games. Omit fields to use the platform's current defaults |
+| `imageModelSources` | Optional top-level field. Pins which platform-provided image model renders NPC portraits (`portrait`), location/area images (`location`), and region maps (`region`) while editing the world; games created from it start with these as their default but can pick their own. Omit fields to use the platform's current defaults |
 
 ## lowAttributeTraits Format
 

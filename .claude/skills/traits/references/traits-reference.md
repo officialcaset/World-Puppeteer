@@ -114,7 +114,7 @@ These fields give the **player character** typed-damage modifiers in combat, the
 ```typescript
 interface TraitCategory {
   name: string                    // ✅ Display name shown to player
-  maxSelections: number           // ✅ Maximum traits player can select (0 = unlimited)
+  maxSelections: number           // ✅ Maximum traits player can select. 0 blocks all selection in the category
   traits: string[]                // ✅ Array of trait keys (not display names)
 }
 ```

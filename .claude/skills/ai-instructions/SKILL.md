@@ -108,7 +108,7 @@ Optional player-selectable modes. Each is keyed by an id and has `name`, `descri
 
 ## imagePromptConfiguration
 
-Optional. Per-entity-type art-direction instructions (`npcs`, `locations`, `regions`) injected into Voyage's in-game image generation — the image equivalent of `narratorStyle`. Set a field to lock a consistent art style for that entity type; omit it to use the defaults. Two optional booleans, `characterLoraEnabled` and `locationLoraEnabled`, toggle the built-in Voyage art style for character and location images respectively (both default to `true`); set either to `false` to opt a world out of the house style. See the reference for the schema and an example.
+Optional. Per-entity-type art-direction instructions (`npcs`, `locations`, `areas`, `regions`) injected into Voyage's in-game image generation — the image equivalent of `narratorStyle`. Set a field to lock a consistent art style for that entity type; omit it to use the defaults. Two optional booleans, `characterLoraEnabled` and `locationLoraEnabled`, toggle the built-in Voyage art style for character images and for location/area images respectively (both default to `true`); set either to `false` to opt a world out of the house style. See the reference for the schema and an example.
 
 ## Starting Templates
 

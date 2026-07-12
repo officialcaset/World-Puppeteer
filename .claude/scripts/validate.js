@@ -123,23 +123,22 @@ const VALID_ARRAY_EFFECT_OPERATORS = ['set', 'add', 'remove'];
 // ============================================================================
 
 const REQUIRED_TOP_LEVEL = [
-  'configVersion',
-  'heroesVersion',
   'aiInstructions',
   'storySettings',
   'worldLore',
-  'embeddings',
   'triggers',
+  'questTriggers',
   'storyStarts',
   'abilities',
   'npcTypes',
-  'items',
+  'itemTypes',
   'realms',
   'regions',
   'locations',
   'factions',
   'npcs',
   'quests',
+  'arcs',
   'narrativeEvents',
   'attributeSettings',
   'skills',
@@ -272,7 +271,7 @@ const LIMITS = {
     npcs: 1_000_000,
     locations: 1_000_000,
     npcTypes: 500_000,
-    items: 100_000,
+    itemTypes: 100_000,
     factions: 100_000,
     regions: 500_000,
     realms: 100_000,
@@ -365,11 +364,29 @@ function getJsonLength(obj) {
   return JSON.stringify(obj, null, 2).length;
 }
 
+const OPTIONAL_TOP_LEVEL = [
+  'gameModes',
+  'characterCreationMusic',
+  'imagePromptConfiguration',
+  'imageModelSources',
+  // Top-level in the merged tabs shape (tabs/world-background.json); build.js
+  // hoists it into storySettings.worldBackground in the compiled config.
+  'worldBackground',
+];
+
 function validateRequiredFields(config, errors) {
   // Top-level required fields
   for (const field of REQUIRED_TOP_LEVEL) {
     if (config[field] === undefined) {
       errors.push(createError(field, `Missing required field: ${field}`));
+    }
+  }
+
+  // Unknown top-level fields
+  const knownTopLevel = new Set([...REQUIRED_TOP_LEVEL, ...OPTIONAL_TOP_LEVEL]);
+  for (const field of Object.keys(config)) {
+    if (!knownTopLevel.has(field)) {
+      errors.push(createError(field, `Unknown field: ${field} — remove it`));
     }
   }
 
@@ -497,16 +514,6 @@ function validateRequiredFields(config, errors) {
         errors.push(createError(`resourceSettings.${resourceId}.color`, `Invalid color format (expected #RRGGBB): ${resource.color}`));
       }
     }
-  }
-}
-
-function validateVersionFields(config, errors) {
-  if (config.configVersion !== undefined && config.configVersion !== 'V34') {
-    errors.push(createError('configVersion', `Invalid configVersion: ${config.configVersion} (expected 'V34')`));
-  }
-
-  if (config.heroesVersion !== undefined && config.heroesVersion !== 34) {
-    errors.push(createError('heroesVersion', `Invalid heroesVersion: ${config.heroesVersion} (expected 34)`));
   }
 }
 
@@ -733,23 +740,23 @@ function validateReferenceIntegrity(config, errors) {
   }
 
   // Item references
-  if (config.items) {
-    for (const [itemId, item] of Object.entries(config.items)) {
+  if (config.itemTypes) {
+    for (const [itemId, item] of Object.entries(config.itemTypes)) {
       // category
       if (item.category && validCategories.size > 0 && !validCategories.has(item.category)) {
-        errors.push(createError(`items.${itemId}.category`, `Invalid item category: ${item.category}. Valid: ${[...validCategories].join(', ')}`));
+        errors.push(createError(`itemTypes.${itemId}.category`, `Invalid item category: ${item.category}. Valid: ${[...validCategories].join(', ')}`));
       }
 
       // slot
       if (item.slot && validSlots.size > 0 && !validSlots.has(item.slot)) {
-        errors.push(createError(`items.${itemId}.slot`, `Invalid item slot: ${item.slot}. Valid: ${[...validSlots].join(', ')}`));
+        errors.push(createError(`itemTypes.${itemId}.slot`, `Invalid item slot: ${item.slot}. Valid: ${[...validSlots].join(', ')}`));
       }
     }
   }
 
   // Trait references
   if (config.traits) {
-    const itemKeys = config.items ? new Set(Object.keys(config.items)) : new Set();
+    const itemKeys = config.itemTypes ? new Set(Object.keys(config.itemTypes)) : new Set();
     const resourceKeys = buildResourceKeySet(config);
     const attributeNames = config.attributeSettings?.attributeNames
       ? new Set(config.attributeSettings.attributeNames.map(a => a.toLowerCase()))
@@ -943,7 +950,7 @@ function validateReferenceIntegrity(config, errors) {
   }
 
   // Item bonus validation
-  if (config.items) {
+  if (config.itemTypes) {
     const attributeNames = config.attributeSettings?.attributeNames
       ? new Set(config.attributeSettings.attributeNames.map(a => a.toLowerCase()))
       : new Set();
@@ -951,10 +958,10 @@ function validateReferenceIntegrity(config, errors) {
     const validBonusTypes = ['attribute', 'stat', 'resource', 'skill'];
     const validStatVariables = ['damage', 'armor', 'speed', 'health']; // common stat variables
 
-    for (const [itemId, item] of Object.entries(config.items)) {
+    for (const [itemId, item] of Object.entries(config.itemTypes)) {
       if (item.bonuses && Array.isArray(item.bonuses)) {
         item.bonuses.forEach((bonus, idx) => {
-          const bonusPath = `items.${itemId}.bonuses[${idx}]`;
+          const bonusPath = `itemTypes.${itemId}.bonuses[${idx}]`;
 
           if (!bonus.type) {
             errors.push(createError(`${bonusPath}.type`, 'Missing required field: type'));
@@ -1106,16 +1113,21 @@ function validateTriggerEffect(effectPath, effect, refs, config, errors) {
 }
 
 function validateTriggers(config, errors) {
-  if (!config.triggers) return;
-
   const refs = buildQuestEventRefs(config);
-  const isArrayForm = Array.isArray(config.triggers);
+  validateTriggerSection('triggers', config.triggers, refs, config, errors);
+  validateTriggerSection('questTriggers', config.questTriggers, refs, config, errors);
+}
+
+function validateTriggerSection(section, triggersValue, refs, config, errors) {
+  if (!triggersValue) return;
+
+  const isArrayForm = Array.isArray(triggersValue);
   const triggerEntries = isArrayForm
-    ? config.triggers.map((t, i) => [i, t])
-    : Object.entries(config.triggers);
+    ? triggersValue.map((t, i) => [i, t])
+    : Object.entries(triggersValue);
 
   triggerEntries.forEach(([key, trigger], idx) => {
-    const basePath = isArrayForm ? `triggers[${idx}]` : `triggers.${key}`;
+    const basePath = isArrayForm ? `${section}[${idx}]` : `${section}.${key}`;
 
     // Name must match object key (engine re-fires non-recurring triggers when mismatched)
     if (!isArrayForm && typeof trigger.name === 'string' && trigger.name !== key) {
@@ -1250,6 +1262,28 @@ function validateNarrativeEvents(config, errors) {
           validateTriggerEffect(`${basePath}.onCompleteEffects[${idx}]`, effect, refs, config, errors);
         });
       }
+    }
+  }
+}
+
+function validateArcs(config, errors) {
+  if (!config.arcs) return;
+
+  if (typeof config.arcs !== 'object' || Array.isArray(config.arcs)) {
+    errors.push(createError('arcs', `Expected object, got ${Array.isArray(config.arcs) ? 'array' : typeof config.arcs}`));
+    return;
+  }
+
+  for (const [arcId, arc] of Object.entries(config.arcs)) {
+    if (!arc || typeof arc !== 'object' || Array.isArray(arc)) {
+      errors.push(createError(`arcs.${arcId}`, `Expected object, got ${Array.isArray(arc) ? 'array' : typeof arc}`));
+      continue;
+    }
+
+    if (typeof arc.id !== 'string' || arc.id.trim() === '') {
+      errors.push(createError(`arcs.${arcId}.id`, 'Missing required field: id'));
+    } else if (arc.id !== arcId) {
+      errors.push(createError(`arcs.${arcId}.id`, `Id "${arc.id}" does not match key "${arcId}"`));
     }
   }
 }
@@ -1483,7 +1517,7 @@ function validateCharacterLimits(config, errors, warnings) {
     }
   }
 
-  checkEntryField('items', config.items, 'description', LIMITS.fields.itemDescription);
+  checkEntryField('itemTypes', config.itemTypes, 'description', LIMITS.fields.itemDescription);
   checkEntryField('factions', config.factions, 'basicInfo', LIMITS.fields.factionBasicInfo);
   checkEntryField('factions', config.factions, 'hiddenInfo', LIMITS.fields.factionHiddenInfo);
   checkEntryField('npcTypes', config.npcTypes, 'description', LIMITS.fields.npcTypeDescription);
@@ -1945,7 +1979,7 @@ function validateUnknownFields(config, errors) {
     factions: new Set([
       'name', 'basicInfo', 'factionType', 'hiddenInfo', 'embeddingId', 'detailType', 'known',
     ]),
-    items: new Set([
+    itemTypes: new Set([
       'name', 'category', 'description', 'bonuses', 'slot', 'mediaContent',
     ]),
     abilities: new Set([
@@ -2073,7 +2107,7 @@ function validateUnknownFields(config, errors) {
     // Game mode entries
     gameMode: new Set(['name', 'description', 'instructions', 'difficulty', 'askTheNarratorPrompt']),
     // Image prompt configuration (per entity type)
-    imagePromptConfiguration: new Set(['npcs', 'locations', 'regions', 'characterLoraEnabled', 'locationLoraEnabled']),
+    imagePromptConfiguration: new Set(['npcs', 'locations', 'areas', 'regions', 'characterLoraEnabled', 'locationLoraEnabled']),
   };
 
   function checkNested(parentPath, obj, knownSet) {
@@ -2113,11 +2147,11 @@ function validateUnknownFields(config, errors) {
   }
 
   // Item bonuses
-  if (config.items) {
-    for (const [itemKey, item] of Object.entries(config.items)) {
+  if (config.itemTypes) {
+    for (const [itemKey, item] of Object.entries(config.itemTypes)) {
       if (Array.isArray(item.bonuses)) {
         item.bonuses.forEach((bonus, i) => {
-          checkNested(`items.${itemKey}.bonuses[${i}]`, bonus, KNOWN_NESTED.itemBonus);
+          checkNested(`itemTypes.${itemKey}.bonuses[${i}]`, bonus, KNOWN_NESTED.itemBonus);
         });
       }
     }
@@ -2257,7 +2291,7 @@ function validateUnknownFields(config, errors) {
     const MAX_IMAGE_PROMPT_INSTRUCTION = 5_000;
     const MAX_IMAGE_PROMPT_TOTAL = 15_000;
     let imagePromptTotal = 0;
-    for (const entityType of ['npcs', 'locations', 'regions']) {
+    for (const entityType of ['npcs', 'locations', 'areas', 'regions']) {
       const prompt = config.imagePromptConfiguration[entityType];
       if (typeof prompt !== 'string') continue;
       imagePromptTotal += prompt.length;
@@ -2296,7 +2330,7 @@ function validateNameKeyMatch(config, errors) {
   // Sections where the object key should exactly match the "name" field
   const sectionsToCheck = [
     'abilities',
-    'items',
+    'itemTypes',
     'locations',
     'regions',
     'realms',
@@ -2307,6 +2341,8 @@ function validateNameKeyMatch(config, errors) {
     'traits',
     'storyStarts',
     'triggers',
+    'questTriggers',
+    'quests',
     'traitCategories',
     'resourceSettings',
     'gameModes',
@@ -2480,11 +2516,11 @@ function validate(config) {
   const errors = [];
   const warnings = [];
 
-  validateVersionFields(config, errors);
   validateRequiredFields(config, errors);
   validateReferenceIntegrity(config, errors);
   validateTriggers(config, errors);
   validateNarrativeEvents(config, errors);
+  validateArcs(config, errors);
   validateDamageTypes(config, errors);
   validateCharacterLimits(config, errors, warnings);
   validateTypeChecks(config, errors);

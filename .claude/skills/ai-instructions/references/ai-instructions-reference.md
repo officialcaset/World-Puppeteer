@@ -12,6 +12,7 @@ interface AIInstructionsTab {
   imagePromptConfiguration?: {
     npcs?: string
     locations?: string
+    areas?: string
     regions?: string
     characterLoraEnabled?: boolean
     locationLoraEnabled?: boolean
@@ -57,7 +58,7 @@ aiInstructions: {
 | `generateRegionDetails` | `custom` |
 | `generateFactionDetails` | `custom` |
 | `generateEncounters` | `custom` |
-| `generateNPCIntents` | `custom` |
+| `generateNPCIntents` | `core_principles`, `when_to_generate`, `what_is_not_action`, `description_economy`, `summary_established_beats`, `action_format`, `story_driver`, `custom` |
 | `generateNewNPC` | `custom` |
 | `ItemGenerationAndUsage` | `custom` |
 
@@ -207,9 +208,10 @@ Optional per-entity-type instructions that steer how Voyage generates images for
 imagePromptConfiguration?: {
   npcs?: string                  // ✅ Art-direction instructions for NPC portraits
   locations?: string             // ✅ Art-direction instructions for location images
+  areas?: string                 // ✅ Art-direction instructions for area images
   regions?: string               // ✅ Art-direction instructions for region map images
   characterLoraEnabled?: boolean // ✅ Toggle the built-in Voyage art style for character images (default true)
-  locationLoraEnabled?: boolean  // ✅ Toggle the built-in Voyage art style for location images (default true)
+  locationLoraEnabled?: boolean  // ✅ Toggle the built-in Voyage art style for location and area images (default true)
 }
 ```
 

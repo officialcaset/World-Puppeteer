@@ -17,22 +17,21 @@
  *   - npcs.json           (NPC definitions)
  *   - npc-types.json      (NPC type templates)
  *   - factions.json       (faction definitions)
- *   - items.json          (item definitions)
+ *   - items.json          (itemTypes definitions)
  *   - skills.json         (skill definitions)
  *   - traits.json         (traits and traitCategories)
  *   - abilities.json      (ability definitions)
  *   - story-starts.json   (story start scenarios)
- *   - triggers.json       (trigger definitions)
+ *   - triggers.json       (trigger + quest-trigger definitions)
  *   - narrative-events.json (narrative event definitions)
- *   - quests.json         (quest definitions)
+ *   - quests.json         (quest + arc definitions)
  *   - world-lore.json     (worldLore entries)
  *   - world-background.json (storySettings with worldBackground)
  *   - ai-instructions.json (aiInstructions, narratorStyle, resourceSettings, death)
  *   - archetypes.json (authorSeeds, characterArchetypes, locationArchetypes,
  *                            regionArchetypes, encounterElements)
  *   - premade-characters.json (premadeCharacters)
- *   - meta.json           (version, embeddings, tipSettings, nameFilterSettings,
- *                          randomNames, mods)
+ *   - meta.json           (tipSettings, nameFilterSettings, randomNames, mods)
  */
 
 const fs = require('fs');
@@ -57,14 +56,14 @@ const SECTIONS = {
   npcs: ['npcs'],
   'npc-types': ['npcTypes'],
   factions: ['factions'],
-  items: ['items'],
+  items: ['itemTypes'],
   skills: ['skills'],
   traits: ['traitCategories', 'traits'],
   abilities: ['abilities'],
   'story-starts': ['storyStarts'],
-  triggers: ['triggers'],
+  triggers: ['triggers', 'questTriggers'],
   'narrative-events': ['narrativeEvents'],
-  quests: ['quests'],
+  quests: ['quests', 'arcs'],
   'world-lore': ['worldLore'],
   'world-background': ['worldBackground'],
   'ai-instructions': ['aiInstructions', 'narratorStyle', 'gameModes', 'imagePromptConfiguration', 'death', 'resourceSettings', 'storySettings'],
@@ -77,9 +76,6 @@ const SECTIONS = {
   ],
   'premade-characters': ['premadeCharacters'],
   meta: [
-    'configVersion',
-    'heroesVersion',
-    'embeddings',
     'tipSettings',
     'nameFilterSettings',
     'randomNames',
@@ -116,7 +112,7 @@ function main() {
     console.error('  - ai-instructions.json (AI instructions, narrator style, resources, death)');
     console.error('  - archetypes.json (author seeds, character/location/region archetypes)');
     console.error('  - premade-characters.json (premade character options)');
-    console.error('  - meta.json            (version, embeddings, tips, name filter, random names, mods)');
+    console.error('  - meta.json            (tips, name filter, random names, mods)');
     process.exit(1);
   }
 
